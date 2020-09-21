@@ -1,0 +1,334 @@
+<mat-horizontal-stepper linear #stepper="matHorizontalStepper">
+  <mat-step [stepControl]="userDetails">
+    <form [formGroup]="userDetails">
+      <ng-template matStepLabel>User Details</ng-template>
+
+      <!-- name field -->
+      <div class="name">
+        <mat-form-field>
+          <span
+            matPrefix
+            *ngIf="
+              !userDetails?.get('name').valid &&
+              userDetails.get('name').errors.required
+            "
+          ></span>
+          <input matInput placeholder="Name" formControlName="name" required />
+          <mat-error
+            *ngFor="
+              let validation of getValidationErrors('userDetails', 'name')
+            "
+          >
+            <mat-error class="error-message">{{
+              validation.message
+            }}</mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- age field -->
+      <div class="age">
+        <mat-form-field>
+          <span
+            matPrefix
+            *ngIf="
+              !userDetails?.get('age').valid &&
+              userDetails.get('age').errors.required
+            "
+          ></span>
+          <input matInput placeholder="Age" formControlName="age" required />
+          <mat-error
+            *ngFor="let validation of getValidationErrors('userDetails', 'age')"
+          >
+            <mat-error class="error-message">{{
+              validation.message
+            }}</mat-error>
+          </mat-error></mat-form-field
+        >
+      </div>
+      <!-- date of birth field -->
+      <div class="dateOfBirth">
+        <mat-form-field>
+          <mat-label>Date of Birth</mat-label>
+          <span
+            matPrefix
+            *ngIf="
+              !userDetails?.get('dateOfBirth').valid &&
+              userDetails.get('dateOfBirth').errors.required
+            "
+          ></span>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="dateOfBirth"
+            required
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error
+            *ngFor="
+              let validation of getValidationErrors(
+                'userDetails',
+                'dateOfBirth'
+              )
+            "
+          >
+            <mat-error class="error-message">{{
+              validation.message
+            }}</mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- country field -->
+      <div class="country">
+        <mat-form-field>
+          <span
+            matPrefix
+            *ngIf="
+              !userDetails?.get('country').valid &&
+              userDetails.get('country').errors.required
+            "
+          ></span>
+          <input
+            matInput
+            placeholder="Country"
+            [formControl]="myControlCountry"
+            aria-label="Country"
+            required
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option
+              *ngFor="let country of countries | async"
+              [value]="country"
+            >
+              {{ country }}
+            </mat-option>
+          </mat-autocomplete>
+
+          <mat-error
+            *ngFor="
+              let validation of getValidationErrors('userDetails', 'country')
+            "
+          >
+            <mat-error class="error-message">{{
+              validation.message
+            }}</mat-error>
+          </mat-error></mat-form-field
+        >
+      </div>
+      <!-- city field -->
+      <div class="city">
+        <mat-form-field>
+          <span
+            matPrefix
+            *ngIf="
+              !userDetails?.get('city').valid &&
+              userDetails.get('city').errors.required
+            "
+          ></span>
+          <input
+            matInput
+            placeholder="Cities"
+            [formControl]="myControlCity"
+            aria-label="City"
+            required
+            [matAutocomplete]="autoTest"
+          />
+          <mat-autocomplete #autoTest="matAutocomplete">
+            <mat-option *ngFor="let city of cities | async" [value]="city">
+              {{ city }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error
+            *ngFor="
+              let validation of getValidationErrors('userDetails', 'city')
+            "
+          >
+            <mat-error class="error-message">{{
+              validation.message
+            }}</mat-error>
+          </mat-error></mat-form-field
+        >
+      </div>
+      <br />
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="userDetailsFavorites">
+    <form [formGroup]="userDetailsFavorites">
+      <ng-template matStepLabel>Questions and Answers</ng-template>
+      <!-- food field -->
+      <div class="food">
+        <mat-form-field>
+          <span
+            matPrefix
+            *ngIf="
+              !userDetailsFavorites?.get('food').valid &&
+              userDetailsFavorites.get('food').errors.required
+            "
+          ></span>
+          <mat-label>Favorite food</mat-label>
+          <mat-select formControlName="food" required>
+            <mat-option *ngFor="let food of foods" [value]="food.value">
+              {{ food.viewValue }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngFor="
+              let validation of getValidationErrors(
+                'userDetailsFavorites',
+                'food'
+              )
+            "
+          >
+            <mat-error class="error-message">{{
+              validation.message
+            }}</mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- animal field -->
+      <div class="animal">
+        <mat-form-field>
+          <span
+            matPrefix
+            *ngIf="
+              !userDetailsFavorites?.get('animal').valid &&
+              userDetailsFavorites.get('animal').errors.required
+            "
+          ></span>
+          <mat-label>Favorite animal</mat-label>
+          <mat-select formControlName="animal" required>
+            <mat-option *ngFor="let animal of animals" [value]="animal.value">
+              {{ animal.viewValue }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngFor="
+              let validation of getValidationErrors(
+                'userDetailsFavorites',
+                'animal'
+              )
+            "
+          >
+            <mat-error class="error-message">{{
+              validation.message
+            }}</mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- pet's name field -->
+      <div class="animal_name">
+        <mat-form-field>
+          <span
+            matPrefix
+            *ngIf="
+              !userDetailsFavorites?.get('animal_name').valid &&
+              userDetailsFavorites.get('animal_name').errors.required
+            "
+          ></span>
+          <input
+            matInput
+            placeholder="Pet's name"
+            formControlName="animal_name"
+            required
+          />
+          <mat-error
+            *ngFor="
+              let validation of getValidationErrors(
+                'userDetailsFavorites',
+                'animal_name'
+              )
+            "
+          >
+            <mat-error class="error-message">{{
+              validation.message
+            }}</mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <br />
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="registration">
+    <form [formGroup]="registration">
+      <ng-template matStepLabel>Registration</ng-template>
+      <!-- username field -->
+      <div class="username">
+        <mat-form-field>
+          <span
+            matPrefix
+            *ngIf="
+              !registration?.get('username').valid &&
+              registration.get('username').errors.required
+            "
+          ></span>
+          <input
+            matInput
+            placeholder="Username"
+            formControlName="username"
+            required
+          />
+          <mat-error
+            *ngFor="
+              let validation of getValidationErrors('registration', 'username')
+            "
+          >
+            <mat-error class="error-message">{{
+              validation.message
+            }}</mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- password field -->
+      <div class="password">
+        <mat-form-field>
+          <span
+            matPrefix
+            *ngIf="
+              !registration?.get('password').valid &&
+              registration.get('password').errors.required
+            "
+          ></span>
+          <input
+            matInput
+            placeholder="Password"
+            formControlName="password"
+            type="password"
+            required
+          />
+          <mat-error
+            *ngFor="
+              let validation of getValidationErrors('registration', 'password')
+            "
+          >
+            <mat-error class="error-message">{{
+              validation.message
+            }}</mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <br />
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button
+          mat-button
+          (click)="onRegister(userDetails, userDetailsFavorites, registration)"
+        >
+          Register
+        </button>
+      </div>
+    </form>
+  </mat-step>
+</mat-horizontal-stepper>
+
+<router-outlet></router-outlet>
