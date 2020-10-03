@@ -4,6 +4,8 @@ import {
   FormGroup,
   Validators,
   FormControl,
+  AbstractControl,
+  ValidatorFn,
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
@@ -22,6 +24,17 @@ interface Food {
 interface Animal {
   value: string;
   viewValue: string;
+}
+
+//checks if the input is a part of string array
+function autocompleteStringValidator(validOptions: Array<string>): ValidatorFn {
+  console.log("here: " + validOptions);
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    if (validOptions.indexOf(control.value) !== -1) {
+      return null; /* valid option selected */
+    }
+    return { invalidAutocompleteString: { value: control.value } };
+  };
 }
 
 @Component({
@@ -49,9 +62,6 @@ export class RegistrationComponent implements AfterViewChecked {
   country: string[] = ["Israel", "USA", "Canada"];
   city: string[] = ["Tel Aviv", "Moscow", "Toronto"];
 
-  myControlCountry = new FormControl();
-  myControlCity = new FormControl();
-
   countries: Observable<string[]>;
   cities: Observable<string[]>;
 
@@ -73,6 +83,23 @@ export class RegistrationComponent implements AfterViewChecked {
       },
     ],
     dateOfBirth: [{ type: "required", message: "Date of Birth is required" }],
+    myControlCountry: [
+      {
+        type: "invalidAutocompleteString",
+        message:
+          "Country is not recognized. Click one of the autocomplete options.",
+      },
+      { type: "required", message: "Contact is required." },
+    ],
+    myControlCity: [
+      {
+        type: "invalidAutocompleteString",
+        message:
+          "City is not recognized. Click one of the autocomplete options.",
+      },
+      { type: "required", message: "Contact is required." },
+    ],
+
     food: [{ type: "required", message: "Favorite Food is required" }],
     animal: [{ type: "required", message: "Favorite Animal is required" }],
     animal_name: [{ type: "required", message: "Pets name is required" }],
@@ -123,7 +150,6 @@ export class RegistrationComponent implements AfterViewChecked {
           Validators.pattern("^[a-zA-Z]+$"),
         ]),
       ],
-
       age: [
         "",
         Validators.compose([
@@ -134,8 +160,20 @@ export class RegistrationComponent implements AfterViewChecked {
         ]),
       ],
       dateOfBirth: [""],
-      country: [""],
-      city: [""],
+      myControlCountry: [
+        "",
+        Validators.compose([
+          autocompleteStringValidator(this.country),
+          Validators.required,
+        ]),
+      ],
+      myControlCity: [
+        "",
+        Validators.compose([
+          autocompleteStringValidator(this.city),
+          Validators.required,
+        ]),
+      ],
     });
     //step2
     this.userDetailsFavorites = this._formBuilder.group({
@@ -164,12 +202,15 @@ export class RegistrationComponent implements AfterViewChecked {
     });
 
     //country autocomplete
-    this.countries = this.myControlCountry.valueChanges.pipe(
+    this.countries = this.userDetails.controls[
+      "myControlCountry"
+    ].valueChanges.pipe(
       startWith(""),
       map((value) => this._filter(value, this.country))
     );
+
     //city autocomplete
-    this.cities = this.myControlCity.valueChanges.pipe(
+    this.cities = this.userDetails.controls["myControlCity"].valueChanges.pipe(
       startWith(""),
       map((value) => this._filter(value, this.city))
     );

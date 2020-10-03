@@ -35,7 +35,13 @@
               userDetails.get('age').errors.required
             "
           ></span>
-          <input matInput placeholder="Age" formControlName="age" required />
+          <input
+            type="number"
+            matInput
+            placeholder="Age"
+            formControlName="age"
+            required
+          />
           <mat-error
             *ngFor="let validation of getValidationErrors('userDetails', 'age')"
           >
@@ -87,14 +93,14 @@
           <span
             matPrefix
             *ngIf="
-              !userDetails?.get('country').valid &&
-              userDetails.get('country').errors.required
+              !userDetails?.get('myControlCountry').valid &&
+              userDetails.get('myControlCountry').errors.required
             "
           ></span>
           <input
             matInput
             placeholder="Country"
-            [formControl]="myControlCountry"
+            formControlName="myControlCountry"
             aria-label="Country"
             required
             [matAutocomplete]="auto"
@@ -110,14 +116,17 @@
 
           <mat-error
             *ngFor="
-              let validation of getValidationErrors('userDetails', 'country')
+              let validation of getValidationErrors(
+                'userDetails',
+                'myControlCountry'
+              )
             "
           >
             <mat-error class="error-message">{{
               validation.message
             }}</mat-error>
-          </mat-error></mat-form-field
-        >
+          </mat-error>
+        </mat-form-field>
       </div>
       <!-- city field -->
       <div class="city">
@@ -125,14 +134,14 @@
           <span
             matPrefix
             *ngIf="
-              !userDetails?.get('city').valid &&
-              userDetails.get('city').errors.required
+              !userDetails?.get('myControlCity').valid &&
+              userDetails.get('myControlCity').errors.required
             "
           ></span>
           <input
             matInput
             placeholder="Cities"
-            [formControl]="myControlCity"
+            formControlName="myControlCity"
             aria-label="City"
             required
             [matAutocomplete]="autoTest"
@@ -144,7 +153,10 @@
           </mat-autocomplete>
           <mat-error
             *ngFor="
-              let validation of getValidationErrors('userDetails', 'city')
+              let validation of getValidationErrors(
+                'userDetails',
+                'myControlCity'
+              )
             "
           >
             <mat-error class="error-message">{{
